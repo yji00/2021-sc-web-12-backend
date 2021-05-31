@@ -1,0 +1,252 @@
+<!-- 
+  1. Template literals
+  2. Arrow function
+  3. 펼침연산자: ...변수
+  4. 구조분해할당: 
+  const arr = [1, 2, 3]
+  let {A, B, C} = arr; //a: 1, b: 2, c: 3
+  const obj = {a: '1', b: '2', c: '3'}
+  let { a, b, c: c2 }= obj;
+  5. Object.keys(), Object.values(), Object.entries()
+
+-->
+
+
+<script src="../public/js/axios.min.js"></script> 
+<script src="../public/js/jquery-3.5.1.js"></script>
+<script>
+// Template Literals(Template String) ES6 추가
+// var clsName = 'gallery';
+var clsName = 'gallery';
+var name = '버튼';
+var html = `
+<div class="wrapper ${clsName}">
+	<div class="bt-wrap">
+		<div class="bt-prev fa fa-angle-left">${name}</div>
+		<div class="bt-next fa fa-angle-right">${name}</div>
+	</div>
+</div>`;
+console.log(html);
+
+
+// 함수선언문 - Hoisting의 대상이 된다.
+console.log(fn);
+function fn() {
+	
+}
+
+// 함수표현식 - ES5 - 변수에 함수를 담기 때문에 Hoisting 대상이 아니다. 항상 선언 된 뒤에서 써야 한다.
+const fn2 = function () {
+	
+}
+console.log(fn2);
+
+// 함수표현식 - ES6 - Arrow Function
+const fn3 = () => {
+	
+}
+console.log(fn3);
+
+const arr = ['홍길동', '홍길만', '홍길용'];
+
+console.log('===================');
+arr.forEach(function(v) {
+	console.log('나는 ' + v + ' 입니다.');
+});
+
+console.log('===================');
+arr.forEach(v => {
+	console.log(`나는 ${v} 입니다.`);
+});
+
+console.log('===================');
+const plusZero = v => v < 10 ? '0' + v : v;
+console.log(plusZero(9));
+
+// spread operator (펼침 연산자)
+// const arr2 = arr; // 얕은 복사
+// const arr2 = arr.slice(); // 깊은 복사
+
+console.log('===================');
+const arr2 = [...arr];
+arr2.push('홍길순');
+console.log(arr, arr2);
+console.log(arr);
+console.log(...arr);
+
+// 펼침연산자 활용
+console.log('===================');
+const family1 = ['홍길동', '홍길만'];
+const family2 = ['홍길순', '홍길이'];
+const family3 = ['홍길삼', '홍길사'];
+const family4 = family1.concat('홍길광').concat(family2).concat(family3); // ES5
+const family5 = [...family1, '홍길광', ...family2, ...family3]; // ES6
+console.log(family4, family5);
+
+console.log('===================');
+function sum() { // 가변인자
+	let total = 0;
+	for(let v of arguments) total += v;
+	return total;
+}
+// ES5
+let total = sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+console.log(total);
+//ES6
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let total2 = sum(...numbers);
+console.log(total2);
+
+// 구조분해할당(비구조화 할당)
+const students = {
+	class1: [
+		{ id: 1, name: '홍길동', kor: 80, eng: 70 },
+		{ id: 2, name: '홍길순', kor: 90, eng: 75 },
+		{ id: 3, name: '홍길만', kor: 88, eng: 92 },
+	],
+	class2: [
+		{ id: 1, name: '홍길이', kor: 80, eng: 70 },
+		{ id: 2, name: '홍길삼', kor: 90, eng: 75 },
+		{ id: 3, name: '홍길사', kor: 88, eng: 92 },
+	],
+	class3: [
+		{ id: 1, name: '홍길오', kor: 80, eng: 70 },
+		{ id: 2, name: '홍길육', kor: 90, eng: 75 },
+		{ id: 3, name: '홍길칠', kor: 88, eng: 92 },
+	],
+}
+
+// let class1 = students.class1;
+// let class2 = students.class2;
+// let class3 = students.class3;
+let { class1, class2, class3 } = students;
+console.log(class1);
+console.log(class2);
+console.log(class3);
+
+
+    //구조분해할당을 활용하기
+    //
+		
+	console.log('===================');
+
+const weatherInfo = {
+	url: 'https://api.openweathermap.org/data/2.5/weather',
+	appid: '0cf73b083cc8b56e77a676f5e5fba3f5',
+	units: 'metric',
+}
+    const onPosition = r => {
+      //let latitude = r.coods.latitude;
+      //let longitude = r.coods.longitude;
+      let { latitude: lat, longitude: lon }= r.coords;
+      let { url } =weatherInfo;
+      
+      $.get(url, { ...weatherInfo, lat, lon}, r => {
+
+      })
+
+      axios
+      .get(url, { params: {...weatherInfo, lat, lon} })
+      .then(r => {
+        let {temp, feels_like: feel } = r.data.main;
+        let { main, description: desc } = r.data.weather[0];
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
+
+
+    const onError = err => {
+      console.log(err);
+    }
+
+    navigator.geolocation.getCurrentPosition(onPosition,onError);
+  
+
+  //객체를 반복문 원칙적으로 돌릴수 없다. -forin
+  const orders = {
+    id: 1001,
+    productName: '가방',
+    price: 2000,
+    cnt: 3, 
+    color: 'red'
+  }
+
+  for(let i in orders){
+    console.log(orders[i]);
+  }
+
+  //ES6에서는 객체를 다음과 같이 반복할 수 있다.
+//var entries = Object.entries(orders);
+console.log('===============================');
+for (let [k, v] of Object.entries(orders)){
+  console.log(k, v);
+}
+
+//Object.entries()
+const arr6 = ['A', 'B', 'C'];
+Object.keys(arr6)
+Object.values(arr6)
+Object.entries(arr6)
+
+	// 문자열검색
+	console.clear();
+	console.log('===================');
+	let str = '동해물과 백두산이 마르고 닳도록';
+	let search = '동해';
+	let isInclude = str.indexOf(search) > -1 ? true : false;
+	console.log(isInclude);
+	let isSearch = str.includes(search); // ES6
+	console.log(isSearch);
+	let isStart = str.startsWith(search); // ES6
+	console.log(isStart);
+	let isEnd = str.endsWith(search); // ES6
+	console.log(isEnd);
+	console.log(str.slice(2));
+	console.log(str.split(' '));
+
+//문자역 검색
+console.log('===============================');
+let str = '동해물과 백두산이 마르고 닳도록';
+let search = '백두산';
+let inIncludes =
+console.log('===============================');
+console.log(String.prototype);
+console.log('===============================');
+console.log(Number.prototype);
+console.log('===============================');
+console.log(Array.prototype);
+console.log('===============================');
+console.log(Object.prototype);
+console.log('===============================');
+console.log(Date.prototype);
+console.log('===============================');
+  console.log(Math);
+
+  //ES6 신규객체 Set(), Map(
+    const set = new Set();
+    set.add('A');
+    set.add('B');
+    set.add('C');
+    set.add('B'); //중복 X
+    set.delete('C');
+    set.values(); //값 전부 보여줌
+
+    set.add(function sub() {});
+    set.add(function sub() {}); //중복 O
+
+		
+	console.log('===================');
+	const map = new Map();
+	map.set('name', '홍길동');
+	map.set('age', 29);
+	map.set('kor', 90);
+	map.set('math', 90);
+	console.log(map);
+	map.delete('math');
+	console.log(map);
+	console.log(map.get('kor'));
+	// map.('id', '홍길동');
+    
+</script>

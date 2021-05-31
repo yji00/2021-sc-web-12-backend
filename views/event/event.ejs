@@ -1,0 +1,14 @@
+
+<%- include('./inc/head.ejs') %> 
+<%- include('./inc/header.ejs') %> 
+<link rel="stylesheet" href="/css/event.css">
+<div class="wrapper">
+	<%- include('./inc/title.ejs', {title: '이벤트페이지 '+event.legth}) %> 
+	<ul class="evt-wrapper">
+		<% for (let v of event) {		%>	
+			<%- include('./event/list.ejs', { v } ) -%>
+				<% } %>
+			</ul>
+		</div>
+		
+		<%- include('./inc/foot.ejs') %> 
