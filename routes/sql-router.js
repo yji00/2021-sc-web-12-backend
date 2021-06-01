@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
 // READ
 router.get('/', (req, res, next) => {
 	let sql = 'SELECT * FROM product';
-	connection.query(sql, (err, r) => {
+	connection.execute(sql, (err, r) => {
 		res.json(r);
 	});
 });
@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
 router.get('/insert', (req, res, next) => {
 	let sql = 'INSERT INTO product SET prdname=?, price=?, content=?';
 	let values = ['잘나가 스마트폰2', 900000, '너무 잘나가는 스마트폰2'];
-	connection.query(sql, values, (err, r) => {
+	connection.execute(sql, values, (err, r) => {
 		res.json(r);
 	});
 });
@@ -31,10 +31,12 @@ router.get('/remove/:id', (req, res, next) => {
 	let id = req.params.id;
 	let sql = 'DELETE FROM product WHERE id=?';
 	let values = [id];
-	connection.query(sql, values, (err, r) => {
+	connection.execute(sql, values, (err, r) => {
 		res.json(r);
 	});
 });
+
+
 
 
 
